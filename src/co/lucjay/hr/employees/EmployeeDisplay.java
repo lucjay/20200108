@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class EmployeeDisplay {
 
@@ -44,4 +45,66 @@ public class EmployeeDisplay {
 		}
 	}
 
+	public void searchSelect() {
+		EmployeeServiceImpl emp = new EmployeeServiceImpl();
+		EmployeeDto dto = new EmployeeDto();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("검색 할 사용자 ID(숫자)를 입력행");
+		int key = sc.nextInt(); // 키보드에서 입력한 id를 저장
+		try {
+			dto = emp.select(key);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dto.toString();
+		sc.close();
+	}
+
+	public void empDelete() {
+		EmployeeServiceImpl emp = new EmployeeServiceImpl();
+		EmployeeDto dto = new EmployeeDto();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("삭제 할 사용자 입력행");
+		dto.setEmployee_id(sc.nextInt());
+		try {
+			int n = emp.delete(dto);
+			if (n != 0)
+				System.out.println("정상적으로 삭제 됨");
+			else
+				System.out.println("삭제 안됐졍");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		sc.close();
+		allSelectList(); // 삭제 후 전체 리스트를 보여준다.
+	}
+
+	public void update() {
+		EmployeeServiceImpl emp = new EmployeeServiceImpl();
+		EmployeeDto dto = new EmployeeDto();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("업뎃할사용자 아이디 숫자로 입력해바");
+		int key = sc.nextInt();
+		try {
+			dto = emp.select(key);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		dto.toString();
+		sc.nextLine();
+		System.out.println("변경 할 Frist name을 입력해");
+		dto.setFirst_name(sc.nextLine());
+		try {
+			int n = emp.update(dto);
+			if (n != 0)
+				System.out.println("정삭적으로 변경됐져~~~");
+			else
+				System.out.println("변경 안됐눈뎅~~~~~");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		sc.close();
+		allSelectList(); // 변경 후 전체 리스트를 보여줌
+	}
 }
